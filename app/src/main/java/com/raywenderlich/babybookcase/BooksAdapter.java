@@ -1,9 +1,12 @@
 package com.raywenderlich.babybookcase;
 
 import android.content.Context;
+import android.media.Image;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class BooksAdapter extends BaseAdapter{
@@ -36,9 +39,29 @@ public class BooksAdapter extends BaseAdapter{
     // return a dummy TextView as the cell view for GridView
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        TextView dummyTextView = new TextView(mContext);
-        dummyTextView.setText(String.valueOf(position));
+        // find the proper book for this cell by using the position index
+        final Book book = books[position];
 
-        return dummyTextView;
+        /* if convertview is null, insantiate a new cell view by using Layout Inflater
+         *
+         */
+        if(convertView == null) {
+            final LayoutInflater layoutInflater = LayoutInflater.from(mContext);
+            convertView = layoutInflater.inflate(R.layout.linearlayout_book, null);
+        }
+
+        //create references for each individual view that created in xml layout
+        final ImageView imageView = (ImageView) convertView.findViewById(R.id.imageview_cover_art);
+        final TextView nameTextView = (TextView) convertView.findViewById(R.id.textview_book_name);
+        final TextView authorTextView = (TextView) convertView.findViewById(R.id.textview_book_author);
+        final ImageView imageViewFavorite = (ImageView) convertView.findViewById(R.id.imageview_cover_art);
+
+
+        // set the book's cover at
+        imageView.setImageResource(book.getImageResource());
+        nameTextView.setText(mContext.getString(book.getName()));
+        authorTextView.setText(mContext.getString(book.getAuthor()));
+
+        return convertView;
     }
 }
